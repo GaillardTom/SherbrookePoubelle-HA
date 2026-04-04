@@ -1,10 +1,10 @@
 {
-  "domain": "sherbrooke_poubelle",
+  "domain": "domotique-sherbrooke",
   "name": "Sherbrooke Waste Collection",
-  "codeowners": ["@tom"],
+  "codeowners": ["@gaillardTom"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/yourusername/sherbrooke-poubelle-ha",
+  "documentation": "https://github.com/gaillardtom/sherbrooke-poubelle-ha",
   "iot_class": "cloud_polling",
   "requirements": ["icalendar>=5.0.0", "recurring-ical-events>=2.0.0"],
   "version": "1.0.0"

@@ -45,6 +45,23 @@ async def async_setup_entry(
     async_add_entities(sensors)
 
 
+class SherbrookeWasteSensor(CoordinatorEntity, SensorEntity):
+    """Base class for Sherbrooke Waste sensors."""
+    
+    def __init__(self, coordinator, entry):
+        super().__init__(coordinator)
+        self._entry = entry
+        # This part creates the "Device" in Home Assistant
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, entry.entry_id)},
+            name="Poubelle Sherbrooke",
+            manufacturer="domotique-sherbrooke",
+            model="Waste Schedule API",
+        )
+    
+
+
+
 class NextCollectionSensor(CoordinatorEntity, SensorEntity):
     """Sensor showing the next waste collection."""
 
@@ -58,8 +75,8 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{entry.entry_id}_next_collection"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
-            name=f"Poubelle - {entry.data[CONF_SELECTED_ADDRESS]}",
-            manufacturer="Ville de Sherbrooke",
+            name=f"Type de collecte",
+            manufacturer="domotique-sherbrooke",
             model=f"Sector {entry.data[CONF_SECTOR]}",
         )
 
@@ -71,11 +88,39 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
 
         next_collection = self.coordinator.data.get("next_collection")
         if not next_collection:
-            return "Unknown"
+            return "Aucune"
 
-        # Return display name for waste type
-        waste_type = next_collection["waste_type"]
-        return WASTE_TYPE_NAMES.get(waste_type, waste_type)
+        # On récupère la liste des types (ex: ['waste', 'compost'])
+        waste_types = next_collection.get("waste_type", [])
+        
+        if not waste_types:
+            return "Inconnu"
+
+        # On traduit chaque type en utilisant WASTE_TYPE_NAMES défini dans const.py
+        # Si le type n'est pas dans le dictionnaire, on garde le code brut
+        names = [WASTE_TYPE_NAMES.get(w, w).capitalize() for w in waste_types]
+        
+        # On joint le tout avec une virgule (ex: "Ordures, Compost")
+        return ", ".join(names)
+
+    @property
+    def icon(self):
+        """Return the icon based on waste types."""
+        if not self.coordinator.data:
+            return "mdi:trash-can"
+
+        next_collection = self.coordinator.data.get("next_collection")
+        if not next_collection or not next_collection.get("waste_type"):
+            return "mdi:trash-can"
+
+        waste_types = next_collection["waste_type"]
+
+        # Si plus d'un type le même jour, on met une icône multiple
+        if len(waste_types) > 1:
+            return "mdi:delete-variant"
+        
+        # Sinon, on prend l'icône spécifique du premier (et seul) élément
+        return ICONS.get(waste_types[0], "mdi:trash-can")
 
     @property
     def extra_state_attributes(self):
@@ -92,23 +137,10 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
 
         return {
             "collection_date": collection_date.isoformat(),
-            "waste_type": next_collection["waste_type"],
+            "waste_type": next_collection.get("waste_type", []),
             "days_until": days_until,
             "raw_summary": next_collection.get("raw_summary", ""),
         }
-
-    @property
-    def icon(self):
-        """Return the icon based on waste type."""
-        if not self.coordinator.data:
-            return "mdi:trash-can"
-
-        next_collection = self.coordinator.data.get("next_collection")
-        if not next_collection:
-            return "mdi:trash-can"
-
-        waste_type = next_collection["waste_type"]
-        return ICONS.get(waste_type, "mdi:trash-can")
 
     @property
     def device_class(self):
@@ -129,8 +161,8 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{entry.entry_id}_countdown"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
-            name=f"Waste Collection - {entry.data[CONF_SELECTED_ADDRESS]}",
-            manufacturer="Ville de Sherbrooke",
+            name=f"Poubelle - {entry.data[CONF_SELECTED_ADDRESS]}",
+            manufacturer="domotique-sherbrooke",
             model=f"Sector {entry.data[CONF_SECTOR]}",
         )
 

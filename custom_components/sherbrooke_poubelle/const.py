@@ -1,6 +1,6 @@
 """Constants for the Sherbrooke Waste Collection integration."""
 
-DOMAIN = "sherbrooke_poubelle"
+DOMAIN = "domotique-sherbrooke"
 
 # API endpoints
 API_SEARCH_URL = "https://www.sherbrooke.ca/api/content/waste-disposal-search/"
@@ -14,22 +14,28 @@ CONF_SECTOR = "sector"
 CONF_COLLECTION_DAY = "collection_day"
 CONF_NOTIFICATION_TIME = "notification_time"
 
-# Update interval (every 24 hours)
-UPDATE_INTERVAL = 24 * 60 * 60  # seconds
+# Update interval (every week should be sufficient since the schedule doesn't change often)
+UPDATE_INTERVAL = 7 * 24 * 60 * 60  # seconds
 
 # Waste types
-WASTE_TYPE_GARBAGE = "garbage"      # Black bin
+WASTE_TYPE_GARBAGE = "waste"      # Black bin
 WASTE_TYPE_RECYCLING = "recycling"  # Green bin 
 WASTE_TYPE_COMPOST = "compost"      # Brown bin 
 
-# Mapping of French terms to waste types
+# Mapping of terms to waste types
 WASTE_TYPE_MAPPING = {
+    #Francais
     "ordures": WASTE_TYPE_GARBAGE,
     "résidus alimentaires": WASTE_TYPE_COMPOST,
     "compost": WASTE_TYPE_COMPOST,
     "organique": WASTE_TYPE_COMPOST,
     "recyclage": WASTE_TYPE_RECYCLING,
     "matières recyclables": WASTE_TYPE_RECYCLING,
+
+    #Anglais
+    "waste": WASTE_TYPE_GARBAGE,
+    "recycling": WASTE_TYPE_RECYCLING,
+    "compost": WASTE_TYPE_COMPOST,
 }
 
 # Icons for each waste type
@@ -48,8 +54,8 @@ COLORS = {
 
 # Display names
 WASTE_TYPE_NAMES = {
-    WASTE_TYPE_GARBAGE: "Garbage",
-    WASTE_TYPE_RECYCLING: "Recycling",
+    WASTE_TYPE_GARBAGE: "Déchets",
+    WASTE_TYPE_RECYCLING: "Recyclage",
     WASTE_TYPE_COMPOST: "Compost",
 }
 

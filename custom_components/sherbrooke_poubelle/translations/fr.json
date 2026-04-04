@@ -28,9 +28,9 @@
       "next_collection": {
         "name": "Prochaine collecte",
         "state": {
-          "garbage": "🗑️ Ordures (Noir)",
-          "recycling": "♻️ Recyclage (Vert)",
-          "compost": "🍂 Compost (Brun)"
+          "garbage": "Ordures (Noir)",
+          "recycling": "Recyclage (Vert)",
+          "compost": "Compost (Brun)"
         }
       },
       "collection_countdown": {
