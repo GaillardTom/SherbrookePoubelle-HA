@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sherbrooke Waste Collection",
+        "description": "Enter your address to find your waste collection schedule.",
+        "data": {
+          "address_number": "Address Number",
+          "street_name": "Street Name"
+        }
+      },
+      "select_address": {
+        "title": "Select Your Address",
+        "description": "Multiple addresses were found. Please select your exact address.",
+        "data": {
+          "selected_address": "Address"
+        }
+      }
+    },
+    "error": {
+      "no_addresses_found": "No addresses found. Please check your address number and street name.",
+      "cannot_connect": "Failed to connect to Sherbrooke API.",
+      "unknown": "Unknown error occurred."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_collection": {
+        "name": "Next Collection",
+        "state": {
+          "garbage": "🗑️ Garbage (Black)",
+          "recycling": "♻️ Recycling (Green)",
+          "compost": "🍂 Compost (Brown)"
+        }
+      },
+      "collection_countdown": {
+        "name": "Days Until Collection"
+      }
+    }
+  }
+}

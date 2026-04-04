@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Collecte des déchets - Sherbrooke",
+        "description": "Entrez votre adresse pour trouver votre calendrier de collecte des déchets.",
+        "data": {
+          "address_number": "Numéro d'adresse",
+          "street_name": "Nom de rue"
+        }
+      },
+      "select_address": {
+        "title": "Sélectionnez votre adresse",
+        "description": "Plusieurs adresses ont été trouvées. Veuillez sélectionner votre adresse exacte.",
+        "data": {
+          "selected_address": "Adresse"
+        }
+      }
+    },
+    "error": {
+      "no_addresses_found": "Aucune adresse trouvée. Vérifiez votre numéro d'adresse et le nom de rue.",
+      "cannot_connect": "Échec de connexion à l'API de Sherbrooke.",
+      "unknown": "Une erreur inconnue s'est produite."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_collection": {
+        "name": "Prochaine collecte",
+        "state": {
+          "garbage": "🗑️ Ordures (Noir)",
+          "recycling": "♻️ Recyclage (Vert)",
+          "compost": "🍂 Compost (Brun)"
+        }
+      },
+      "collection_countdown": {
+        "name": "Jours avant collecte"
+      }
+    }
+  }
+}

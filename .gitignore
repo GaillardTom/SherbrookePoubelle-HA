@@ -1,0 +1,6 @@
+*.env
+*/.env
+test-ha-config
+test-docker-compose.yml
+validation-ha-config.py
+validate-integration.py
