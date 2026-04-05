@@ -31,6 +31,7 @@ WASTE_TYPE_MAPPING = {
     "organique": WASTE_TYPE_COMPOST,
     "récupération": WASTE_TYPE_RECYCLING,
     "matières recyclables": WASTE_TYPE_RECYCLING,
+    "recyclage": WASTE_TYPE_RECYCLING,
 
     #Anglais
     "waste": WASTE_TYPE_GARBAGE,

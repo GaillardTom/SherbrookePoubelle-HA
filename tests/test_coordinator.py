@@ -86,7 +86,7 @@ class TestConstants:
         # French terms
         assert "ordures" in WASTE_TYPE_MAPPING
         assert "résidus alimentaires" in WASTE_TYPE_MAPPING
-        assert "recyclage" in WASTE_TYPE_MAPPING
+        assert "récupération" in WASTE_TYPE_MAPPING
 
         # English terms
         assert "waste" in WASTE_TYPE_MAPPING

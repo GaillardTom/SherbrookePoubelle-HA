@@ -5,3 +5,4 @@ test-docker-compose.yml
 validation-ha-config.py
 validate-integration.py
 pytest.ini
+venv/
