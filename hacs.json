@@ -1,9 +1,4 @@
 {
   "name": "Sherbrooke Waste Collection",
-  "country": ["CA"],
-  "domains": ["sensor", "notify"],
-  "iot_class": "Cloud Polling",
-  "render_readme": true,
-  "zip_release": false,
-  "filename": "sherbrooke_poubelle.zip"
+  "country": ["CA"]
 }
