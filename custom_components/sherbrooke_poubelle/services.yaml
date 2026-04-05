@@ -1,0 +1,17 @@
+# Sherbrooke Waste Collection Services
+
+# The notify platform creates entities automatically.
+# No manual service calls are required for basic operation.
+
+# Optional: If you want to manually trigger a notification check
+# This service would need to be implemented in notify.py if desired
+
+# notify:
+#   description: Send a waste collection notification reminder
+#   fields:
+#     message:
+#       description: Custom message to send
+#       example: "Don't forget to put out the bins!"
+#     title:
+#       description: Title for the notification
+#       example: "Waste Collection Reminder"

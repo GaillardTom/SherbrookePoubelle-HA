@@ -20,6 +20,7 @@ from .const import (
     API_SEARCH_URL,
 )
 
+_LOGGER = logging.getLogger(__name__)
 
 class SherbrookeWasteConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Sherbrooke Waste Collection."""
@@ -159,4 +160,3 @@ class SherbrookeWasteConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return "unknown"
 
 
-_LOGGER = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
 """Constants for the Sherbrooke Waste Collection integration."""
 
-DOMAIN = "domotique-sherbrooke"
+DOMAIN = "sherbrooke_poubelle"
 
 # API endpoints
 API_SEARCH_URL = "https://www.sherbrooke.ca/api/content/waste-disposal-search/"

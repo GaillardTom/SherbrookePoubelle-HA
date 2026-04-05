@@ -74,14 +74,14 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
                     grouped_collections[event_date].add(t)
 
                 # Transformer le dictionnaire en liste triée pour Home Assistant
-                final_collections = []
-                for date, types in grouped_collections.items():
-                    final_collections.append({
-                        "date": date,
-                        "waste_type": list(types), # On repasse en liste pour le sensor
-                    })
+            final_collections = []
+            for date, types in grouped_collections.items():
+                final_collections.append({
+                    "date": date,
+                    "waste_type": list(types), # On repasse en liste pour le sensor
+                })
 
-                final_collections.sort(key=lambda x: x["date"])
+            final_collections.sort(key=lambda x: x["date"])
 
             return {
                 "collections": final_collections,
@@ -97,8 +97,6 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
         #Should fix to have multiple waste types if multiple keywords matches
         summary_lower = summary.lower()
         waste_types_found = set()
-        _LOGGER.debug("Detecting waste type from summary: '%s'", summary)
-        print(f"Detecting waste type from summary: '{summary}'")  # Debug print
         for keyword, waste_type in WASTE_TYPE_MAPPING.items():
             if keyword in summary_lower:
                 waste_types_found.add(waste_type)
