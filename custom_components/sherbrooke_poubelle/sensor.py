@@ -161,7 +161,7 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{entry.entry_id}_countdown"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
-            name=f"Poubelle - {entry.data[CONF_SELECTED_ADDRESS]}",
+            name=f"",
             manufacturer="domotique-sherbrooke",
             model=f"Sector {entry.data[CONF_SECTOR]}",
         )
