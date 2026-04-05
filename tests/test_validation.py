@@ -273,12 +273,12 @@ def test_brand_assets_exist():
     See: https://hacs.xyz/docs/publish/include#brands
     """
     base_path = Path(__file__).parent.parent
-    brands_dir = base_path / "custom_components" / "sherbrooke_poubelle" / "brands"
+    brands_dir = base_path / "custom_components" / "sherbrooke_poubelle" / "brand"
 
     # Check if brands directory exists inside integration
     if not brands_dir.exists():
         # Also check root-level brands folder
-        brands_dir = base_path / "brands"
+        brands_dir = base_path / "brand"
 
     icon_file = brands_dir / "icon.png"
 
