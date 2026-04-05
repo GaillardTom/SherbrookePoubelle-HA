@@ -58,22 +58,25 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
             # Process events into structured data
             grouped_collections = {}
 
+
             for event in events:
                 summary = str(event.get("summary", "")).lower()
                 dtstart = event.get("dtstart").dt
                 event_date = dtstart.date() if isinstance(dtstart, datetime) else dtstart
-                
+
                 # Détecter les types pour cet événement précis
                 current_types = self._detect_waste_type(summary)
 
+                _LOGGER.debug("Event: date=%s, summary='%s', detected_types=%s", event_date, summary, current_types)
+
                 if event_date not in grouped_collections:
                     grouped_collections[event_date] = set()
-                
+
                 # Ajouter les types trouvés au set de cette date
                 for t in current_types:
                     grouped_collections[event_date].add(t)
 
-                # Transformer le dictionnaire en liste triée pour Home Assistant
+            # Transformer le dictionnaire en liste triée pour Home Assistant
             final_collections = []
             for date, types in grouped_collections.items():
                 final_collections.append({
@@ -94,7 +97,6 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
 
     def _detect_waste_type(self, summary: str) -> list:
         """Detect waste type from event summary."""
-        #Should fix to have multiple waste types if multiple keywords matches
         summary_lower = summary.lower()
         waste_types_found = set()
         for keyword, waste_type in WASTE_TYPE_MAPPING.items():

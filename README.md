@@ -14,7 +14,7 @@ A custom Home Assistant integration for the City of Sherbrooke's waste collectio
 
 ## Features
 
-- 🔍 **Address-based setup**: Enter your address and select from matching results
+- **Address-based setup**: Enter your address and select from matching results
 - **ICS Calendar sync**: Automatically fetches your collection schedule
 - **Color-coded bins**: Green=Recycling, Brown=Compost, Black=Garbage
 - **Countdown sensor**: Shows days until next collection
@@ -179,12 +179,7 @@ This integration uses the official waste collection data from the [City of Sherb
 
 ## License
 
-This project is licensed under a **Personal Use License**. See [LICENSE](LICENSE) for details.
-
-- **Personal use**: ✅ Allowed
-- **Commercial use**: ❌ Prohibited without explicit permission
-- **Redistribution**: ✅ Allowed with attribution and same license
-- **Modification**: ✅ Allowed for personal use
+This project is licensed under a **Personal Use License**. See [LICENSE](./LICENSE) for details.
 
 ## Disclaimer
 

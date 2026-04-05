@@ -29,7 +29,7 @@ WASTE_TYPE_MAPPING = {
     "résidus alimentaires": WASTE_TYPE_COMPOST,
     "compost": WASTE_TYPE_COMPOST,
     "organique": WASTE_TYPE_COMPOST,
-    "recyclage": WASTE_TYPE_RECYCLING,
+    "récupération": WASTE_TYPE_RECYCLING,
     "matières recyclables": WASTE_TYPE_RECYCLING,
 
     #Anglais
