@@ -1,5 +1,6 @@
 {
   "name": "Sherbrooke Waste Collection",
-  "render_readme": true,
-  "standard_configuration": true
+  "country": ["CA"],
+  "iot_class": "Cloud Polling",
+  "render_readme": true
 }
