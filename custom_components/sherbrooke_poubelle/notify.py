@@ -97,7 +97,7 @@ class WasteCollectionNotifyEntity(NotifyEntity):
         # Notify the day before (or configured days before)
         if days_until == NOTIFICATION_DAYS_BEFORE:
             waste_type = next_collection["waste_type"]
-            waste_name = WASTE_TYPE_NAMES.get(waste_type, waste_type)
+            waste_name = WASTE_TYPE_NAMES.get(waste_type, waste_type) if isinstance(waste_type, str) else ", ".join(WASTE_TYPE_NAMES.get(wt, wt) for wt in waste_type)
 
             message = self._build_notification_message(
                 waste_name, collection_date, days_until
@@ -120,7 +120,7 @@ class WasteCollectionNotifyEntity(NotifyEntity):
         else:
             when = f"in {days_until} days ({date_str})"
 
-        return f"🗑️ Waste Collection Reminder: Put out the {waste_name} bin {when}!"
+        return f"Waste Collection Reminder: Put out the {waste_name} bin {when}!"
 
     async def async_send_message(self, message: str, title: str = None) -> None:
         """Send a notification message (required by NotifyEntity)."""

@@ -28,9 +28,9 @@
       "next_collection": {
         "name": "Next Collection",
         "state": {
-          "garbage": "🗑️ Garbage (Black)",
-          "recycling": "♻️ Recycling (Green)",
-          "compost": "🍂 Compost (Brown)"
+          "garbage": "Garbage (Black)",
+          "recycling": "Recycling (Green)",
+          "compost": "Compost (Brown)"
         }
       },
       "collection_countdown": {

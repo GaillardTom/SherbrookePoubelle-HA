@@ -103,6 +103,46 @@ card_mod:
     }
 ```
 
+## Testing
+
+### Running Tests Locally
+
+```bash
+# Run standalone validation
+python tests/test_validation.py
+
+# Run with pytest
+pip install -r requirements_test.txt
+pytest tests/
+```
+
+### Validation Checks
+
+The test suite validates:
+- All required files exist
+- Python syntax is valid
+- JSON files are valid
+- Manifest structure is correct
+- Domain is consistent across files
+- No debug print statements remain
+- Logger is defined before use
+- Coordinator loop structure is correct
+- HACS metadata exists
+- LICENSE file exists
+
+### Continuous Integration
+
+This repository includes GitHub Actions workflows that automatically run on every push to `main`:
+
+| Workflow | Purpose | Status |
+|----------|---------|--------|
+| `validate.yml` | Runs validation tests, pytest, and linting | ![Validate](https://github.com/gaillardTom/sherbrooke-poubelle-ha/workflows/Validate%20Integration/badge.svg) |
+| `release.yml` | Builds release packages on new releases | - |
+| HACS | Validates HACS integration compatibility | - |
+| Hassfest | Validates Home Assistant integration standards | - |
+
+To view the workflow status, check the Actions tab in the GitHub repository.
+
 ## Troubleshooting
 
 ### No addresses found
@@ -127,11 +167,37 @@ custom_components/sherbrooke_poubelle/
 ├── manifest.json            # Integration metadata
 ├── notify.py                # Notification service
 ├── sensor.py                # Sensors
+├── services.yaml            # Service definitions
 └── translations/
     ├── en.json              # English
     └── fr.json              # French
 
+.github/workflows/            # CI/CD workflows
+├── validate.yml             # Validation on push
+├── brands.yml               # Brand validation
+└── release.yml              # Release automation
+
+brands/                       # Brand assets for HACS
+├── icon.png                 # Main integration icon (256x256)
+├── icon@2x.png              # High-res icon (512x512)
+├── logo.png                 # Logo with text (optional)
+├── dark_icon.png            # Dark mode icon (optional)
+├── dark_logo.png            # Dark mode logo (optional)
+└── README.md                # Brand creation guide
+
+scripts/                      # Helper scripts
+├── create-icon.py           # Create a basic icon with Python
+├── prepare-brands.sh        # Prepare brands for submission (Unix)
+└── prepare-brands.ps1       # Prepare brands for submission (Windows)
+
+tests/                        # Test suite
+├── test_validation.py       # Structure validation
+├── test_coordinator.py      # Coordinator tests
+└── test_config_flow.py      # Config flow tests
+
 dashboard-examples.md         # Dashboard card examples
+hacs.json                     # HACS metadata
+LICENSE                       # Personal Use License
 ```
 
 ## Data Source
@@ -142,6 +208,69 @@ This integration uses the official waste collection data from the [City of Sherb
 
 - 🇬🇧 English
 - 🇫🇷 French
+
+## License
+
+This project is licensed under a **Personal Use License**. See [LICENSE](LICENSE) for details.
+
+- **Personal use**: ✅ Allowed
+- **Commercial use**: ❌ Prohibited without explicit permission
+- **Redistribution**: ✅ Allowed with attribution and same license
+- **Modification**: ✅ Allowed for personal use
+
+## Brand / Icon
+
+This integration includes brand assets for HACS display.
+
+### For HACS (Required)
+
+HACS requires a `brands/` directory with at least an `icon.png` file.
+
+**Option 1: Include in your repository (Easiest)**
+```
+custom_components/sherbrooke_poubelle/brands/
+├── icon.png          # Required: 256x256px PNG
+├── icon@2x.png       # Optional: 512x512px PNG
+├── dark_icon.png     # Optional: white version for dark mode
+└── logo.png          # Optional: wider format with text
+```
+
+HACS will automatically find and display this icon.
+
+**Option 2: Submit to Home Assistant Brands repository**
+Fork https://github.com/home-assistant/brands and create `custom_integrations/domotique-sherbrooke/icon.png`
+
+### Creating the Icon
+
+Use the provided script to create a basic icon:
+
+```bash
+pip install pillow
+python scripts/create-icon.py
+```
+
+Or design your own using:
+- [Icon Kitchen](https://icon.kitchen/) (Recommended - free, simple)
+- [Material Design Icons](https://materialdesignicons.com/)
+- Any image editor (Photoshop, GIMP, Figma, etc.)
+
+**Requirements:**
+- Format: PNG (not SVG for custom integrations)
+- Size: 256x256 pixels
+- Background: Transparent
+- Style: Simple, recognizable at small sizes
+
+### Icon Design
+
+Suggested design elements:
+- **Trash can** or **bin** (represents waste collection)
+- **Recycling symbol** (green color #27ae60)
+- Colors matching the integration:
+  - Garbage: Dark gray #2c3e50
+  - Recycling: Green #27ae60
+  - Compost: Brown #8B4513
+
+See [brands/README.md](brands/README.md) for detailed guidelines.
 
 ## Disclaimer
 

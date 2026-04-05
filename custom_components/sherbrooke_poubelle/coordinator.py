@@ -56,46 +56,50 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
             events = recurring_ical_events.of(calendar).between(today, end_date)
 
             # Process events into structured data
-            collections = []
+            grouped_collections = {}
+
             for event in events:
                 summary = str(event.get("summary", "")).lower()
                 dtstart = event.get("dtstart").dt
+                event_date = dtstart.date() if isinstance(dtstart, datetime) else dtstart
+                
+                # Détecter les types pour cet événement précis
+                current_types = self._detect_waste_type(summary)
 
-                # Determine waste type from summary
-                waste_type = self._detect_waste_type(summary)
+                if event_date not in grouped_collections:
+                    grouped_collections[event_date] = set()
+                
+                # Ajouter les types trouvés au set de cette date
+                for t in current_types:
+                    grouped_collections[event_date].add(t)
 
-                if isinstance(dtstart, datetime):
-                    event_date = dtstart.date()
-                else:
-                    event_date = dtstart
-
-                collections.append({
-                    "date": event_date,
-                    "waste_type": waste_type,
-                    "summary": summary,
-                    "raw_summary": str(event.get("summary", "")),
+                # Transformer le dictionnaire en liste triée pour Home Assistant
+            final_collections = []
+            for date, types in grouped_collections.items():
+                final_collections.append({
+                    "date": date,
+                    "waste_type": list(types), # On repasse en liste pour le sensor
                 })
 
-            # Sort by date
-            collections.sort(key=lambda x: x["date"])
+            final_collections.sort(key=lambda x: x["date"])
 
             return {
-                "collections": collections,
-                "next_collection": collections[0] if collections else None,
+                "collections": final_collections,
+                "next_collection": final_collections[0] if final_collections else None,
             }
 
         except Exception as err:
             _LOGGER.error("Error fetching waste collection data: %s", err)
             raise
 
-    def _detect_waste_type(self, summary: str) -> str:
+    def _detect_waste_type(self, summary: str) -> list:
         """Detect waste type from event summary."""
+        #Should fix to have multiple waste types if multiple keywords matches
         summary_lower = summary.lower()
-
+        waste_types_found = set()
         for keyword, waste_type in WASTE_TYPE_MAPPING.items():
             if keyword in summary_lower:
-                return waste_type
+                waste_types_found.add(waste_type)
 
         # Default to garbage if can't determine
-        _LOGGER.debug("Could not determine waste type for: %s", summary)
-        return WASTE_TYPE_GARBAGE
+        return list(waste_types_found) if waste_types_found else [WASTE_TYPE_GARBAGE]

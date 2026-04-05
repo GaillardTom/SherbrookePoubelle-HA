@@ -1,0 +1,45 @@
+Personal Use License Agreement
+
+Copyright (c) 2024 Tom Gaillard (@gaillardTom)
+
+Permission is hereby granted, free of charge, to any individual obtaining a copy
+of this software and associated documentation files (the "Software"), to use
+the Software for personal, non-commercial purposes only, subject to the following
+conditions:
+
+1. PERSONAL USE ONLY
+   This Software is licensed solely for personal, non-commercial use.
+   Commercial use, including but not limited to:
+   - Selling the Software or derivative works
+   - Using the Software in a commercial product or service
+   - Using the Software to provide paid services to third parties
+   - Using the Software in any revenue-generating activity
+   is STRICTLY PROHIBITED without explicit written permission from the author.
+
+2. REDISTRIBUTION
+   Redistribution of the Software, modified or unmodified, is permitted provided
+   that:
+   - This license notice is included in all copies
+   - The Software is not sold or used for commercial purposes
+   - Credit is given to the original author
+
+3. MODIFICATION
+   You may modify the Software for personal use. Any distributed modifications
+   must be licensed under these same terms.
+
+4. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+5. TERMINATION
+   This license automatically terminates if you violate any of its terms.
+
+For commercial use inquiries, please contact the author through GitHub:
+https://github.com/gaillardTom/sherbrooke-poubelle-ha
+
+This is an unofficial integration and is not affiliated with the City of Sherbrooke.
