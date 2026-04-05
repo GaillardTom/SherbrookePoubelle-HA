@@ -153,5 +153,5 @@ class TestConfigFlowConstants:
         assert "sherbrooke.ca" in API_SEARCH_URL
 
 
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+# if __name__ == "__main__":
+#     pytest.main([__file__, "-v"])
