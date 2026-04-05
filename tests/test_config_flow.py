@@ -17,12 +17,12 @@ class TestConfigFlow:
 
         # Test valid URL
         url = "https://www.sherbrooke.ca/sectors/01/days/Lundi/ics"
-        sector = SherbrookeWasteConfigFlow._extract_sector(None, url)
+        sector = SherbrookeWasteConfigFlow._extract_sector(url)
         assert sector == "01"
 
         # Test another valid URL
         url = "https://www.sherbrooke.ca/sectors/15/days/Mardi/ics"
-        sector = SherbrookeWasteConfigFlow._extract_sector(None, url)
+        sector = SherbrookeWasteConfigFlow._extract_sector(url)
         assert sector == "15"
 
     def test_extract_sector_invalid_url(self):
@@ -31,11 +31,11 @@ class TestConfigFlow:
 
         # Test URL without sectors
         url = "https://www.sherbrooke.ca/some/other/path"
-        sector = SherbrookeWasteConfigFlow._extract_sector(None, url)
+        sector = SherbrookeWasteConfigFlow._extract_sector(url)
         assert sector == "unknown"
 
         # Test empty URL
-        sector = SherbrookeWasteConfigFlow._extract_sector(None, "")
+        sector = SherbrookeWasteConfigFlow._extract_sector("")
         assert sector == "unknown"
 
     def test_config_flow_version(self):
