@@ -13,7 +13,7 @@ class TestConfigFlow:
 
     def test_extract_sector_from_url(self):
         """Test extraction of sector from calendar URL."""
-        from config_flow import SherbrookeWasteConfigFlow
+        from custom_components.sherbrooke_poubelle.config_flow import SherbrookeWasteConfigFlow
 
         # Test valid URL
         url = "https://www.sherbrooke.ca/sectors/01/days/Lundi/ics"
@@ -27,7 +27,7 @@ class TestConfigFlow:
 
     def test_extract_sector_invalid_url(self):
         """Test extraction with invalid URL returns unknown."""
-        from config_flow import SherbrookeWasteConfigFlow
+        from custom_components.sherbrooke_poubelle.config_flow import SherbrookeWasteConfigFlow
 
         # Test URL without sectors
         url = "https://www.sherbrooke.ca/some/other/path"
@@ -40,7 +40,7 @@ class TestConfigFlow:
 
     def test_config_flow_version(self):
         """Test that config flow has a version defined."""
-        from config_flow import SherbrookeWasteConfigFlow
+        from custom_components.sherbrooke_poubelle.config_flow import SherbrookeWasteConfigFlow
 
         assert hasattr(SherbrookeWasteConfigFlow, 'VERSION')
         assert isinstance(SherbrookeWasteConfigFlow.VERSION, int)

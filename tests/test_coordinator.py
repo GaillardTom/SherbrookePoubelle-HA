@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 # sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"))
 
-from const import WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
 from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
 class TestWasteTypeDetection:
@@ -18,7 +18,7 @@ class TestWasteTypeDetection:
 
     def test_detect_garbage(self):
         """Test detection of garbage waste type."""
-        from coordinator import SherbrookeWasteCoordinator
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
         coordinator = Mock(spec=SherbrookeWasteCoordinator)
         # Create a mock instance with the method
@@ -30,7 +30,7 @@ class TestWasteTypeDetection:
 
     def test_detect_recycling(self):
         """Test detection of recycling waste type."""
-        from coordinator import SherbrookeWasteCoordinator
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
         coordinator = Mock(spec=SherbrookeWasteCoordinator)
         coordinator._detect_waste_type = SherbrookeWasteCoordinator._detect_waste_type
@@ -42,7 +42,7 @@ class TestWasteTypeDetection:
 
     def test_detect_compost(self):
         """Test detection of compost waste type."""
-        from coordinator import SherbrookeWasteCoordinator
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
         coordinator = Mock(spec=SherbrookeWasteCoordinator)
         coordinator._detect_waste_type = SherbrookeWasteCoordinator._detect_waste_type
@@ -54,7 +54,7 @@ class TestWasteTypeDetection:
 
     def test_detect_multiple_types(self):
         """Test detection when multiple waste types are mentioned."""
-        from coordinator import SherbrookeWasteCoordinator
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
         coordinator = Mock(spec=SherbrookeWasteCoordinator)
         coordinator._detect_waste_type = SherbrookeWasteCoordinator._detect_waste_type
@@ -66,7 +66,7 @@ class TestWasteTypeDetection:
 
     def test_default_to_garbage(self):
         """Test that unknown waste types default to garbage."""
-        from coordinator import SherbrookeWasteCoordinator
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
         coordinator = Mock(spec=SherbrookeWasteCoordinator)
         coordinator._detect_waste_type = SherbrookeWasteCoordinator._detect_waste_type
@@ -81,7 +81,7 @@ class TestConstants:
 
     def test_waste_type_mapping(self):
         """Test that waste type mapping includes expected terms."""
-        from const import WASTE_TYPE_MAPPING
+        from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_MAPPING
 
         # French terms
         assert "ordures" in WASTE_TYPE_MAPPING
@@ -95,7 +95,7 @@ class TestConstants:
 
     def test_icons_defined(self):
         """Test that icons are defined for all waste types."""
-        from const import ICONS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+        from custom_components.sherbrooke_poubelle.const import ICONS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
 
         assert WASTE_TYPE_GARBAGE in ICONS
         assert WASTE_TYPE_RECYCLING in ICONS
@@ -107,7 +107,7 @@ class TestConstants:
 
     def test_colors_defined(self):
         """Test that colors are defined for all waste types."""
-        from const import COLORS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+        from custom_components.sherbrooke_poubelle.const import COLORS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
 
         assert WASTE_TYPE_GARBAGE in COLORS
         assert WASTE_TYPE_RECYCLING in COLORS
@@ -120,7 +120,7 @@ class TestConstants:
 
     def test_names_defined(self):
         """Test that display names are defined for all waste types."""
-        from const import WASTE_TYPE_NAMES, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+        from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_NAMES, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
 
         assert WASTE_TYPE_GARBAGE in WASTE_TYPE_NAMES
         assert WASTE_TYPE_RECYCLING in WASTE_TYPE_NAMES
@@ -132,7 +132,7 @@ class TestConfigFlowConstants:
 
     def test_config_keys_exist(self):
         """Test that all config keys are defined."""
-        from const import (
+        from custom_components.sherbrooke_poubelle.const import (
             CONF_ADDRESS_NUMBER,
             CONF_STREET_NAME,
             CONF_SELECTED_ADDRESS,
@@ -147,7 +147,7 @@ class TestConfigFlowConstants:
 
     def test_api_url_defined(self):
         """Test that API URL is defined."""
-        from const import API_SEARCH_URL
+        from custom_components.sherbrooke_poubelle.const import API_SEARCH_URL
 
         assert API_SEARCH_URL.startswith("https://")
         assert "sherbrooke.ca" in API_SEARCH_URL
