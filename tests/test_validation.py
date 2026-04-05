@@ -302,10 +302,10 @@ def test_brand_icon_is_valid_png():
             return
 
     base_path = Path(__file__).parent.parent
-    brands_dir = base_path / "custom_components" / "sherbrooke_poubelle" / "brands"
+    brands_dir = base_path / "custom_components" / "sherbrooke_poubelle" / "brand"
 
     if not brands_dir.exists():
-        brands_dir = base_path / "brands"
+        brands_dir = base_path / "brand"
 
     icon_file = brands_dir / "icon.png"
 
