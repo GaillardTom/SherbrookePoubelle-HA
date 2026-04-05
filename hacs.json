@@ -1,3 +1,6 @@
 {
-  "name": "Sherbrooke Waste Collection"
+  "name": "Sherbrooke Waste Collection",
+  "render_readme": true,
+  "standard_configuration": true,
+  "homeassistant": "2024.1.0"
 }
