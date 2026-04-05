@@ -5,8 +5,8 @@
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/gaillardtom/SherbrookePoubelle-HA",
-  "issue_tracker": "https://github.com/gaillardtom/SherbrookePoubelle-HA/issues",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/gaillardtom/SherbrookePoubelle-HA/issues",
   "requirements": ["icalendar>=5.0.0", "recurring-ical-events>=2.0.0"],
   "version": "1.0.0"
 }
