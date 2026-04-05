@@ -82,26 +82,7 @@ automation:
 
 ## Dashboard Cards
 
-See [dashboard-examples.md](dashboard-examples.md) for beautiful pre-made cards like:
-
-### Simple Color-Coded Card
-```yaml
-type: entity
-entity: sensor.sherbrooke_poubelle_next_collection
-name: Next Collection
-card_mod:
-  style: |
-    ha-card {
-      {% if states('sensor.sherbrooke_poubelle_next_collection') == 'Recycling' %}
-        background-color: #27ae60;
-      {% elif states('sensor.sherbrooke_poubelle_next_collection') == 'Compost' %}
-        background-color: #8B4513;
-      {% else %}
-        background-color: #2c3e50;
-      {% endif %}
-      color: white;
-    }
-```
+See [dashboard-examples.md](dashboard-examples.md) for beautiful pre-made cards
 
 ## Testing
 
@@ -129,19 +110,6 @@ The test suite validates:
 - Coordinator loop structure is correct
 - HACS metadata exists
 - LICENSE file exists
-
-### Continuous Integration
-
-This repository includes GitHub Actions workflows that automatically run on every push to `main`:
-
-| Workflow | Purpose | Status |
-|----------|---------|--------|
-| `validate.yml` | Runs validation tests, pytest, and linting | ![Validate](https://github.com/gaillardTom/sherbrooke-poubelle-ha/workflows/Validate%20Integration/badge.svg) |
-| `release.yml` | Builds release packages on new releases | - |
-| HACS | Validates HACS integration compatibility | - |
-| Hassfest | Validates Home Assistant integration standards | - |
-
-To view the workflow status, check the Actions tab in the GitHub repository.
 
 ## Troubleshooting
 
@@ -217,60 +185,6 @@ This project is licensed under a **Personal Use License**. See [LICENSE](LICENSE
 - **Commercial use**: ❌ Prohibited without explicit permission
 - **Redistribution**: ✅ Allowed with attribution and same license
 - **Modification**: ✅ Allowed for personal use
-
-## Brand / Icon
-
-This integration includes brand assets for HACS display.
-
-### For HACS (Required)
-
-HACS requires a `brands/` directory with at least an `icon.png` file.
-
-**Option 1: Include in your repository (Easiest)**
-```
-custom_components/sherbrooke_poubelle/brands/
-├── icon.png          # Required: 256x256px PNG
-├── icon@2x.png       # Optional: 512x512px PNG
-├── dark_icon.png     # Optional: white version for dark mode
-└── logo.png          # Optional: wider format with text
-```
-
-HACS will automatically find and display this icon.
-
-**Option 2: Submit to Home Assistant Brands repository**
-Fork https://github.com/home-assistant/brands and create `custom_integrations/domotique-sherbrooke/icon.png`
-
-### Creating the Icon
-
-Use the provided script to create a basic icon:
-
-```bash
-pip install pillow
-python scripts/create-icon.py
-```
-
-Or design your own using:
-- [Icon Kitchen](https://icon.kitchen/) (Recommended - free, simple)
-- [Material Design Icons](https://materialdesignicons.com/)
-- Any image editor (Photoshop, GIMP, Figma, etc.)
-
-**Requirements:**
-- Format: PNG (not SVG for custom integrations)
-- Size: 256x256 pixels
-- Background: Transparent
-- Style: Simple, recognizable at small sizes
-
-### Icon Design
-
-Suggested design elements:
-- **Trash can** or **bin** (represents waste collection)
-- **Recycling symbol** (green color #27ae60)
-- Colors matching the integration:
-  - Garbage: Dark gray #2c3e50
-  - Recycling: Green #27ae60
-  - Compost: Brown #8B4513
-
-See [brands/README.md](brands/README.md) for detailed guidelines.
 
 ## Disclaimer
 
