@@ -93,6 +93,11 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
 
         except Exception as err:
             _LOGGER.error("Error fetching waste collection data: %s", err)
+            # Return previous data if available so sensors can still update
+            # This allows day calculations to refresh even if calendar fetch fails
+            if self.data:
+                _LOGGER.debug("Returning cached data due to fetch error")
+                return self.data
             raise
 
     def _detect_waste_type(self, summary: str) -> list:
