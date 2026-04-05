@@ -5,8 +5,8 @@ from unittest.mock import Mock, patch, AsyncMock
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"))
-
+# sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"))
+from custom_components.sherbrooke_poubelle.config_flow import SherbrookeWasteConfigFlow
 
 class TestConfigFlow:
     """Test the config flow."""

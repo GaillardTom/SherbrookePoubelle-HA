@@ -8,10 +8,10 @@ import icalendar
 # Import the module under test
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"))
+# sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"))
 
 from const import WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
-
+from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
 class TestWasteTypeDetection:
     """Test waste type detection from calendar summaries."""

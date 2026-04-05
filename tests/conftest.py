@@ -5,9 +5,10 @@ import sys
 from pathlib import Path
 
 # Add the integration directory to the path
-integration_path = Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"
-sys.path.insert(0, str(integration_path))
-
+# integration_path = Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"
+# sys.path.insert(0, str(integration_path))
+root_path = Path(__file__).parent.parent
+sys.path.insert(0, str(root_path))
 
 @pytest.fixture
 def mock_hass():
