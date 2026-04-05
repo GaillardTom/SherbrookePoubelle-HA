@@ -4,13 +4,9 @@
 
 A custom Home Assistant integration for the City of Sherbrooke's waste collection calendar. Automatically shows which bin to put out based on your address.
 
-## Bin Colors
+## Example
 
-| Type | Color | Icon |
-|----------|-------|------|
-| **Garbage** | Black | `mdi:trash-can` |
-| **Recycling** | Green | `mdi:recycle` |
-| **Compost** | Brown | `mdi:leaf` |
+![Example of Dashboard](./images/example.png)
 
 ## Features
 
@@ -18,8 +14,6 @@ A custom Home Assistant integration for the City of Sherbrooke's waste collectio
 - **ICS Calendar sync**: Automatically fetches your collection schedule
 - **Color-coded bins**: Green=Recycling, Brown=Compost, Black=Garbage
 - **Countdown sensor**: Shows days until next collection
-- **Automatic notifications**: Get reminded the day before collection
-- **Dashboard cards**: Beautiful pre-made card examples
 - **Bilingual**: English and French support
 
 ## Installation
@@ -63,27 +57,6 @@ Two sensors are created:
 - **Unit**: `days`
 - **Icon**: Changes based on how close the collection is
 
-## Notifications
-
-Automatic notifications are sent at **7:00 PM the day before** collection. You can use this in automations:
-
-```yaml
-automation:
-  - alias: "Waste Collection Reminder"
-    trigger:
-      - platform: state
-        entity_id: sensor.sherbrooke_poubelle_next_collection
-    action:
-      - service: notify.mobile_app_your_phone
-        data:
-          title: "Waste Collection Reminder"
-          message: "Put out the {{ states('sensor.sherbrooke_poubelle_next_collection') }} bin!"
-```
-
-## Dashboard Cards
-
-See [dashboard-examples.md](dashboard-examples.md) for beautiful pre-made cards
-
 ## Testing
 
 ### Running Tests Locally
@@ -114,10 +87,9 @@ The test suite validates:
 ## Troubleshooting
 
 ### No addresses found
-- Enter your address in uppercase
 - Make sure you enter just the street name without "Rue", "Boulevard", etc.
 - Example: Use `LAROCQUE` instead of `Rue Larocque`
-- If your address uses an accent do not use it.
+- Do not use accent or special characters for the street name
 - Example: Use `LUNIVERSITE` instead of `L'université`
 
 ### Calendar not updating
