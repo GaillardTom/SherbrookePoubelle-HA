@@ -29,7 +29,7 @@ A custom Home Assistant integration for the City of Sherbrooke's waste collectio
 
 1. Copy `custom_components/sherbrooke_poubelle` to your Home Assistant `config/custom_components` directory
 2. Restart Home Assistant
-3. Add the integration via Settings > Devices & Services > Add Integration
+3. Add the integration via Settings > Devices & Services > Add Integration > "Sherbrooke Waste Collection"
 
 ## Setup
 
@@ -114,7 +114,6 @@ custom_components/sherbrooke_poubelle/
 
 .github/workflows/            # CI/CD workflows
 ├── validate.yml             # Validation on push
-├── brands.yml               # Brand validation
 └── release.yml              # Release automation
 
 brands/                       # Brand assets for HACS
@@ -125,10 +124,6 @@ brands/                       # Brand assets for HACS
 ├── dark_logo.png            # Dark mode logo (optional)
 └── README.md                # Brand creation guide
 
-scripts/                      # Helper scripts
-├── create-icon.py           # Create a basic icon with Python
-├── prepare-brands.sh        # Prepare brands for submission (Unix)
-└── prepare-brands.ps1       # Prepare brands for submission (Windows)
 
 tests/                        # Test suite
 ├── test_validation.py       # Structure validation

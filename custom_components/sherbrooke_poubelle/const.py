@@ -14,8 +14,8 @@ CONF_SECTOR = "sector"
 CONF_COLLECTION_DAY = "collection_day"
 CONF_NOTIFICATION_TIME = "notification_time"
 
-# Update interval (monthly refetch of calendar data)
-UPDATE_INTERVAL = 30 * 24 * 60 * 60  # 30 days in seconds
+# Update interval (Daily refresh)
+UPDATE_INTERVAL = 24 * 60 * 60  # 24 hours in seconds
 
 # Waste types
 WASTE_TYPE_GARBAGE = "waste"      # Black bin

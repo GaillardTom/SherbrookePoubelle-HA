@@ -181,7 +181,7 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
             )
         )
 
-    def _handle_midnight_update(self, now: datetime) -> None:
+    async def _handle_midnight_update(self, now: datetime) -> None:
         """Handle the midnight update to refresh day count."""
         self.async_write_ha_state()
 
@@ -235,8 +235,8 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
         days_until = (next_collection["date"] - datetime.now().date()).days
 
         if days_until == 0:
-            return "mdi:calendar-today"
+            return "mdi:calendar-alert"
         elif days_until == 1:
-            return "mdi:calendar-tomorrow"
+            return "mdi:calendar-alert"
         else:
-            return "mdi:calendar-clock"
+            return "mdi:calendar-check"
