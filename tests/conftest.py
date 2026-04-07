@@ -32,13 +32,13 @@ def mock_config_entry():
     entry = Mock()
     entry.entry_id = "test_entry_id"
     entry.data = {
-        "address_number": "1234",
-        "street_name": "TEST",
-        "selected_address": "1234 Test Street",
+        "address_number": "1268",
+        "street_name": "CALAIS",
+        "selected_address": "1268 RUE CALAIS",
         "calendar_url": "https://www.sherbrooke.ca/sectors/01/days/Lundi/ics",
         "sector": "01",
         "collection_day": "Lundi",
     }
-    entry.title = "1234 Test Street"
+    entry.title = "1268 RUE CALAIS"
 
     return entry
