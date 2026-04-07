@@ -119,10 +119,6 @@ custom_components/sherbrooke_poubelle/
 brands/                       # Brand assets for HACS
 ├── icon.png                 # Main integration icon (256x256)
 ├── icon@2x.png              # High-res icon (512x512)
-├── logo.png                 # Logo with text (optional)
-├── dark_icon.png            # Dark mode icon (optional)
-├── dark_logo.png            # Dark mode logo (optional)
-└── README.md                # Brand creation guide
 
 
 tests/                        # Test suite
