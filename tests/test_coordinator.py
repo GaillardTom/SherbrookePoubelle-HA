@@ -75,6 +75,210 @@ class TestWasteTypeDetection:
         # Should return a list with garbage as default
         assert WASTE_TYPE_GARBAGE in result
 
+class TestDateParsing:
+    """Test date parsing and handling in the coordinator."""
+
+    @pytest.fixture
+    def sample_ics_data(self):
+        """Return the existing sample ICS data from the test file."""
+        return """BEGIN:VCALENDAR
+PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.2.0//EN
+VERSION:2.0
+BEGIN:VEVENT
+DTEND:20260413T071500
+DTSTAMP:20260407T043926Z
+DTSTART:20260413T070000
+SEQUENCE:0
+SUMMARY:Compost
+UID:d5183f79-ef7e-4f86-9e86-550fa2d9967a
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Compost
+TRIGGER:-PT15M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTEND:20260413T071500
+DTSTAMP:20260407T043926Z
+DTSTART:20260413T070000
+SEQUENCE:0
+SUMMARY:Waste
+UID:801069f9-c351-4992-96b4-cdaa6da2cf6c
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Waste
+TRIGGER:-PT15M
+END:VALARM
+END:VEVENT
+END:VCALENDAR"""
+
+    @pytest.fixture
+    def mock_coordinator(self, mock_hass):
+        """Create a coordinator for testing."""
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
+        return SherbrookeWasteCoordinator(mock_hass, "http://test.url/calendar.ics")
+
+    @pytest.mark.asyncio
+    async def test_parses_datetime_values_from_ics(self, mock_hass, sample_ics_data, mock_coordinator):
+        """Test parsing ICS events with DATETIME values (DTSTART:20260413T070000)."""
+        mock_response = AsyncMock()
+        mock_response.text.return_value = sample_ics_data
+        mock_response.raise_for_status = Mock()
+
+        mock_session = Mock()
+        mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_session.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+        with patch("aiohttp.ClientSession") as mock_session_class, \
+             patch("homeassistant.util.dt.now") as mock_now:
+
+            mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
+            mock_session_class.return_value.__aexit__ = AsyncMock(return_value=False)
+
+            # Simulate current date is April 7, 2026
+            mock_now.return_value = datetime(2026, 4, 7, 12, 0, 0)
+
+            data = await mock_coordinator._async_update_data()
+
+        assert data is not None
+        assert "collections" in data
+        collections = data["collections"]
+        assert len(collections) == 1  # Both events on same date, grouped
+
+        # Check the date is correctly extracted (April 13, 2026)
+        assert collections[0]["date"] == date(2026, 4, 13)
+
+    @pytest.mark.asyncio
+    async def test_groups_multiple_types_on_same_date(self, mock_hass, sample_ics_data, mock_coordinator):
+        """Test that multiple waste types on the same date are grouped together."""
+        mock_response = AsyncMock()
+        mock_response.text.return_value = sample_ics_data
+        mock_response.raise_for_status = Mock()
+
+        mock_session = Mock()
+        mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_session.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+        with patch("aiohttp.ClientSession") as mock_session_class, \
+             patch("homeassistant.util.dt.now") as mock_now:
+
+            mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
+            mock_session_class.return_value.__aexit__ = AsyncMock(return_value=False)
+
+            mock_now.return_value = datetime(2026, 4, 7, 12, 0, 0)
+
+            data = await mock_coordinator._async_update_data()
+
+        collections = data["collections"]
+        assert len(collections) == 1
+
+        waste_types = collections[0]["waste_type"]
+        assert len(waste_types) == 2
+        assert WASTE_TYPE_COMPOST in waste_types
+        assert WASTE_TYPE_GARBAGE in waste_types
+
+    @pytest.mark.asyncio
+    async def test_next_collection_identifies_earliest_date(self, mock_hass, sample_ics_data, mock_coordinator):
+        """Test that next_collection returns the earliest upcoming collection."""
+        mock_response = AsyncMock()
+        mock_response.text.return_value = sample_ics_data
+        mock_response.raise_for_status = Mock()
+
+        mock_session = Mock()
+        mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_session.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+        with patch("aiohttp.ClientSession") as mock_session_class, \
+             patch("homeassistant.util.dt.now") as mock_now:
+
+            mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
+            mock_session_class.return_value.__aexit__ = AsyncMock(return_value=False)
+
+            mock_now.return_value = datetime(2026, 4, 7, 12, 0, 0)
+
+            data = await mock_coordinator._async_update_data()
+
+        next_collection = data["next_collection"]
+        assert next_collection is not None
+        assert next_collection["date"] == date(2026, 4, 13)
+        assert WASTE_TYPE_COMPOST in next_collection["waste_type"]
+        assert WASTE_TYPE_GARBAGE in next_collection["waste_type"]
+
+    @pytest.mark.asyncio
+    async def test_events_before_today_filtered(self, mock_hass, mock_coordinator):
+        """Test that events before today are filtered out."""
+        ics_data = """BEGIN:VCALENDAR
+PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.2.0//EN
+VERSION:2.0
+BEGIN:VEVENT
+DTEND:20260405T071500
+DTSTAMP:20260407T043926Z
+DTSTART:20260405T070000
+SEQUENCE:0
+SUMMARY:Collecte des ordures
+UID:test-past@example.com
+END:VEVENT
+BEGIN:VEVENT
+DTEND:20260413T071500
+DTSTAMP:20260407T043926Z
+DTSTART:20260413T070000
+SEQUENCE:0
+SUMMARY:Compost
+UID:test-future@example.com
+END:VEVENT
+END:VCALENDAR"""
+
+        mock_response = AsyncMock()
+        mock_response.text.return_value = ics_data
+        mock_response.raise_for_status = Mock()
+
+        mock_session = Mock()
+        mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_session.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+        with patch("aiohttp.ClientSession") as mock_session_class, \
+             patch("homeassistant.util.dt.now") as mock_now:
+
+            mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
+            mock_session_class.return_value.__aexit__ = AsyncMock(return_value=False)
+
+            mock_now.return_value = datetime(2026, 4, 7, 12, 0, 0)
+
+            data = await mock_coordinator._async_update_data()
+
+        collections = data["collections"]
+        assert len(collections) == 1
+        assert collections[0]["date"] == date(2026, 4, 13)
+
+    @pytest.mark.asyncio
+    async def test_empty_calendar_returns_empty_collections(self, mock_hass, mock_coordinator):
+        """Test that an empty calendar returns empty collections and None next_collection."""
+        ics_data = """BEGIN:VCALENDAR
+PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.2.0//EN
+VERSION:2.0
+END:VCALENDAR"""
+
+        mock_response = AsyncMock()
+        mock_response.text.return_value = ics_data
+        mock_response.raise_for_status = Mock()
+
+        mock_session = Mock()
+        mock_session.get.return_value.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_session.get.return_value.__aexit__ = AsyncMock(return_value=False)
+
+        with patch("aiohttp.ClientSession") as mock_session_class, \
+             patch("homeassistant.util.dt.now") as mock_now:
+
+            mock_session_class.return_value.__aenter__ = AsyncMock(return_value=mock_session)
+            mock_session_class.return_value.__aexit__ = AsyncMock(return_value=False)
+
+            mock_now.return_value = datetime(2026, 4, 7, 12, 0, 0)
+
+            data = await mock_coordinator._async_update_data()
+
+        assert data["collections"] == []
+        assert data["next_collection"] is None
+
 
 class TestConstants:
     """Test that constants are properly defined."""
@@ -152,6 +356,3 @@ class TestConfigFlowConstants:
         assert API_SEARCH_URL.startswith("https://")
         assert "sherbrooke.ca" in API_SEARCH_URL
 
-
-# if __name__ == "__main__":
-#     pytest.main([__file__, "-v"])
