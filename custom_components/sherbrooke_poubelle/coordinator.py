@@ -10,6 +10,8 @@ import recurring_ical_events
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.util import dt as dt_util
+
 
 from .const import (
     DOMAIN,
@@ -50,7 +52,7 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
             calendar = icalendar.Calendar.from_ical(ics_data)
 
             # Get events for next 7 days
-            today = datetime.now().date()
+            today = dt_util.now().date() #datetime.now().date()
             end_date = today + timedelta(days=30)
 
             events = recurring_ical_events.of(calendar).between(today, end_date)
@@ -64,6 +66,10 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
                 dtstart = event.get("dtstart").dt
                 event_date = dtstart.date() if isinstance(dtstart, datetime) else dtstart
 
+                if isinstance(dtstart, datetime):
+                    event_date = dt_util.as_local(dtstart).date()
+                else:
+                    event_date = dtstart 
                 # Détecter les types pour cet événement précis
                 current_types = self._detect_waste_type(summary)
 

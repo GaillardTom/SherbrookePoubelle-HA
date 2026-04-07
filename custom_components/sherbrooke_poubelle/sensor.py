@@ -100,8 +100,7 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
         # On traduit chaque type en utilisant WASTE_TYPE_NAMES défini dans const.py
         # Si le type n'est pas dans le dictionnaire, on garde le code brut
         names = [WASTE_TYPE_NAMES.get(w, w).capitalize() for w in waste_types]
-        
-        # On joint le tout avec une virgule (ex: "Ordures, Compost")
+        names.sort()  # Tri alphabetiquement pour ne pas melanger les noms ie: Dechets, Compost vs Compost, Dechets
         return ", ".join(names)
 
     @property
@@ -135,9 +134,10 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
 
         collection_date = next_collection["date"]
         days_until = (collection_date - datetime.now().date()).days
+        _LOGGER.debug("Next collection date: %s, days until: %d", collection_date, days_until)
 
         return {
-            "collection_date": collection_date.isoformat(),
+            "collection_date": (collection_date + timedelta(days=1)).strftime("%Y-%m-%d"),
             "waste_type": next_collection.get("waste_type", []),
             "days_until": days_until,
             "raw_summary": next_collection.get("raw_summary", ""),
@@ -213,7 +213,7 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
         collection_date = next_collection["date"]
 
         return {
-            "collection_date": collection_date.isoformat(),
+            "collection_date": (collection_date + timedelta(days=1)).strftime("%Y-%m-%d"),
             "waste_type": next_collection["waste_type"],
         }
 
