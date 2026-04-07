@@ -1,3 +1,4 @@
+.pyinit
 *.env
 */.env
 test-ha-config
@@ -6,3 +7,4 @@ validation-ha-config.py
 validate-integration.py
 pytest.ini
 venv/
+.pytest_cache
