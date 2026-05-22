@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 # sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components" / "sherbrooke_poubelle"))
 
-from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST, WASTE_TYPE_CARDBOARD, WASTE_TYPE_DEAD_LEAVES
 from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
 
 class TestWasteTypeDetection:
@@ -51,6 +51,28 @@ class TestWasteTypeDetection:
         assert WASTE_TYPE_COMPOST in coordinator._detect_waste_type(coordinator, "résidus alimentaires")
         assert WASTE_TYPE_COMPOST in coordinator._detect_waste_type(coordinator, "compost collection")
         assert WASTE_TYPE_COMPOST in coordinator._detect_waste_type(coordinator, "organique")
+
+    def test_detect_cardboard(self):
+        """Test detection of cardboard waste type."""
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
+
+        coordinator = Mock(spec=SherbrookeWasteCoordinator)
+        coordinator._detect_waste_type = SherbrookeWasteCoordinator._detect_waste_type
+
+        # Test French and English terms
+        assert WASTE_TYPE_CARDBOARD in coordinator._detect_waste_type(coordinator, "Carton")
+        assert WASTE_TYPE_CARDBOARD in coordinator._detect_waste_type(coordinator, "cardboard collection")
+
+    def test_detect_dead_leaves(self):
+        """Test detection of dead leaves waste type."""
+        from custom_components.sherbrooke_poubelle.coordinator import SherbrookeWasteCoordinator
+
+        coordinator = Mock(spec=SherbrookeWasteCoordinator)
+        coordinator._detect_waste_type = SherbrookeWasteCoordinator._detect_waste_type
+
+        # Test French and English terms
+        assert WASTE_TYPE_DEAD_LEAVES in coordinator._detect_waste_type(coordinator, "Feuilles mortes")
+        assert WASTE_TYPE_DEAD_LEAVES in coordinator._detect_waste_type(coordinator, "dead leaves collection")
 
     def test_detect_multiple_types(self):
         """Test detection when multiple waste types are mentioned."""
@@ -291,19 +313,25 @@ class TestConstants:
         assert "ordures" in WASTE_TYPE_MAPPING
         assert "résidus alimentaires" in WASTE_TYPE_MAPPING
         assert "récupération" in WASTE_TYPE_MAPPING
+        assert "carton" in WASTE_TYPE_MAPPING
+        assert "feuilles mortes" in WASTE_TYPE_MAPPING
 
         # English terms
         assert "waste" in WASTE_TYPE_MAPPING
         assert "recycling" in WASTE_TYPE_MAPPING
         assert "compost" in WASTE_TYPE_MAPPING
+        assert "cardboard" in WASTE_TYPE_MAPPING
+        assert "dead leaves" in WASTE_TYPE_MAPPING
 
     def test_icons_defined(self):
         """Test that icons are defined for all waste types."""
-        from custom_components.sherbrooke_poubelle.const import ICONS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+        from custom_components.sherbrooke_poubelle.const import ICONS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST, WASTE_TYPE_CARDBOARD, WASTE_TYPE_DEAD_LEAVES
 
         assert WASTE_TYPE_GARBAGE in ICONS
         assert WASTE_TYPE_RECYCLING in ICONS
         assert WASTE_TYPE_COMPOST in ICONS
+        assert WASTE_TYPE_CARDBOARD in ICONS
+        assert WASTE_TYPE_DEAD_LEAVES in ICONS
 
         # Check they start with mdi:
         for icon in ICONS.values():
@@ -311,11 +339,13 @@ class TestConstants:
 
     def test_colors_defined(self):
         """Test that colors are defined for all waste types."""
-        from custom_components.sherbrooke_poubelle.const import COLORS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+        from custom_components.sherbrooke_poubelle.const import COLORS, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST, WASTE_TYPE_CARDBOARD, WASTE_TYPE_DEAD_LEAVES
 
         assert WASTE_TYPE_GARBAGE in COLORS
         assert WASTE_TYPE_RECYCLING in COLORS
         assert WASTE_TYPE_COMPOST in COLORS
+        assert WASTE_TYPE_CARDBOARD in COLORS
+        assert WASTE_TYPE_DEAD_LEAVES in COLORS
 
         # Check they are valid hex colors
         for color in COLORS.values():
@@ -324,11 +354,13 @@ class TestConstants:
 
     def test_names_defined(self):
         """Test that display names are defined for all waste types."""
-        from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_NAMES, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST
+        from custom_components.sherbrooke_poubelle.const import WASTE_TYPE_NAMES, WASTE_TYPE_GARBAGE, WASTE_TYPE_RECYCLING, WASTE_TYPE_COMPOST, WASTE_TYPE_CARDBOARD, WASTE_TYPE_DEAD_LEAVES
 
         assert WASTE_TYPE_GARBAGE in WASTE_TYPE_NAMES
         assert WASTE_TYPE_RECYCLING in WASTE_TYPE_NAMES
         assert WASTE_TYPE_COMPOST in WASTE_TYPE_NAMES
+        assert WASTE_TYPE_CARDBOARD in WASTE_TYPE_NAMES
+        assert WASTE_TYPE_DEAD_LEAVES in WASTE_TYPE_NAMES
 
 
 class TestConfigFlowConstants:

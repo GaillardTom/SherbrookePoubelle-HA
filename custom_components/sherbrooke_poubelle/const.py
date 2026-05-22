@@ -20,7 +20,9 @@ UPDATE_INTERVAL = 24 * 60 * 60  # 24 hours in seconds
 # Waste types
 WASTE_TYPE_GARBAGE = "waste"      # Black bin
 WASTE_TYPE_RECYCLING = "recycling"  # Green bin 
-WASTE_TYPE_COMPOST = "compost"      # Brown bin 
+WASTE_TYPE_COMPOST = "compost"      # Brown bin
+WASTE_TYPE_CARDBOARD = "cardboard"  # Cardboard bin
+WASTE_TYPE_DEAD_LEAVES = "dead_leaves"  # Dead leaves bin
 
 # Mapping of terms to waste types
 WASTE_TYPE_MAPPING = {
@@ -32,6 +34,10 @@ WASTE_TYPE_MAPPING = {
     "récupération": WASTE_TYPE_RECYCLING,
     "matières recyclables": WASTE_TYPE_RECYCLING,
     "recyclage": WASTE_TYPE_RECYCLING,
+    "carton": WASTE_TYPE_CARDBOARD,
+    "cardboard": WASTE_TYPE_CARDBOARD,
+    "feuilles mortes": WASTE_TYPE_DEAD_LEAVES,
+    "dead leaves": WASTE_TYPE_DEAD_LEAVES,
 
     #Anglais
     "waste": WASTE_TYPE_GARBAGE,
@@ -44,13 +50,17 @@ ICONS = {
     WASTE_TYPE_GARBAGE: "mdi:trash-can",
     WASTE_TYPE_RECYCLING: "mdi:recycle",
     WASTE_TYPE_COMPOST: "mdi:leaf",
+    WASTE_TYPE_CARDBOARD: "mdi:package-variant",
+    WASTE_TYPE_DEAD_LEAVES: "mdi:leaf-circle",
 }
 
 # Colors for each waste type
 COLORS = {
     WASTE_TYPE_GARBAGE: "#2c3e50",   # Dark gray/black
     WASTE_TYPE_RECYCLING: "#27ae60", # Green 
-    WASTE_TYPE_COMPOST: "#8B4513",   # Brown 
+    WASTE_TYPE_COMPOST: "#8B4513",   # Brown
+    WASTE_TYPE_CARDBOARD: "#D2691E", # Chocolate/cardboard brown
+    WASTE_TYPE_DEAD_LEAVES: "#556B2F", # Dark khaki
 }
 
 # Display names
@@ -58,6 +68,8 @@ WASTE_TYPE_NAMES = {
     WASTE_TYPE_GARBAGE: "Déchets",
     WASTE_TYPE_RECYCLING: "Recyclage",
     WASTE_TYPE_COMPOST: "Compost",
+    WASTE_TYPE_CARDBOARD: "Carton",
+    WASTE_TYPE_DEAD_LEAVES: "Feuilles mortes",
 }
 
 # Notification settings
