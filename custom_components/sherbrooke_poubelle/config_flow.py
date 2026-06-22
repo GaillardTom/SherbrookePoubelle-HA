@@ -68,7 +68,7 @@ class SherbrookeWasteConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            selected_index = user_input[CONF_SELECTED_ADDRESS]
+            selected_index = int(user_input[CONF_SELECTED_ADDRESS])
             selected = self._addresses[selected_index]
 
             # Create config entry
@@ -86,7 +86,7 @@ class SherbrookeWasteConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Build selection list
         address_choices = {
-            i: f"{addr['address']} (Jour: {addr['day']})"
+            str(i): f"{addr['address']} (Jour: {addr['day']})"
             for i, addr in enumerate(self._addresses)
         }
 
