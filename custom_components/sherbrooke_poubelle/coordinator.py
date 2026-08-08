@@ -103,6 +103,26 @@ class SherbrookeWasteCoordinator(DataUpdateCoordinator):
             _LOGGER.error("Error fetching waste collection data: %s", err)
             raise
 
+    def get_next_collection(self):
+        """Return the first collection that has not passed yet.
+
+        The calendar is only refetched once a day, so the cached
+        "next_collection" can point at a date already behind us. On resélectionne
+        depuis la liste complète avec la date du jour pour que le compte à
+        rebours ne devienne jamais négatif.
+        """
+        if not self.data:
+            return None
+
+        today = dt_util.now().date()
+
+        for collection in self.data.get("collections", []):
+            if collection["date"] >= today:
+                return collection
+
+        # Toutes les collectes en cache sont passées (données trop vieilles)
+        return None
+
     def _detect_waste_type(self, summary: str) -> list:
         """Detect waste type from event summary."""
         summary_lower = summary.lower()

@@ -10,6 +10,7 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.event import async_track_time_change
+from homeassistant.util import dt as dt_util
 
 from .const import (
     DOMAIN,
@@ -50,31 +51,46 @@ async def async_setup_entry(
 
 class SherbrookeWasteSensor(CoordinatorEntity, SensorEntity):
     """Base class for Sherbrooke Waste sensors."""
-    
-    def __init__(self, coordinator, entry):
-        super().__init__(coordinator)
-        self._entry = entry
-        # This part creates the "Device" in Home Assistant
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, entry.entry_id)},
-            name="Poubelle Sherbrooke",
-            manufacturer="domotique-sherbrooke",
-            model="Waste Schedule API",
-        )
-    
-
-
-
-class NextCollectionSensor(CoordinatorEntity, SensorEntity):
-    """Sensor showing the next waste collection."""
 
     _attr_has_entity_name = True
+
+    def __init__(self, coordinator: SherbrookeWasteCoordinator, entry: ConfigEntry):
+        super().__init__(coordinator)
+        self._entry = entry
+
+    async def async_added_to_hass(self) -> None:
+        """When entity is added to hass."""
+        await super().async_added_to_hass()
+        # Update at midnight every day to recalculate days_until
+        self.async_on_remove(
+            async_track_time_change(
+                self.hass,
+                self._handle_midnight_update,
+                hour=0,
+                minute=0,
+                second=0,
+            )
+        )
+
+    async def _handle_midnight_update(self, now: datetime) -> None:
+        """Handle the midnight update to refresh day count."""
+        # La collecte d'hier est maintenant passee : on reecrit l'etat tout de
+        # suite (get_next_collection saute les dates passees), puis on demande
+        # un rafraichissement du calendrier.
+        self.async_write_ha_state()
+        await self.coordinator.async_request_refresh()
+
+
+
+
+class NextCollectionSensor(SherbrookeWasteSensor):
+    """Sensor showing the next waste collection."""
+
     _attr_translation_key = "next_collection"
 
     def __init__(self, coordinator: SherbrookeWasteCoordinator, entry: ConfigEntry):
         """Initialize the sensor."""
-        super().__init__(coordinator)
-        self._entry = entry
+        super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}_next_collection"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
@@ -89,7 +105,7 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
         if not self.coordinator.data:
             return None
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection:
             return "Aucune"
 
@@ -111,7 +127,7 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
         if not self.coordinator.data:
             return "mdi:trash-can"
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection or not next_collection.get("waste_type"):
             return "mdi:trash-can"
 
@@ -130,12 +146,12 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
         if not self.coordinator.data:
             return {}
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection:
             return {}
 
         collection_date = next_collection["date"]
-        days_until = (collection_date - datetime.now().date()).days
+        days_until = (collection_date - dt_util.now().date()).days
         _LOGGER.debug("Next collection date: %s, days until: %d", collection_date, days_until)
 
         return {
@@ -151,16 +167,14 @@ class NextCollectionSensor(CoordinatorEntity, SensorEntity):
         return None
 
 
-class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
+class CollectionCountdownSensor(SherbrookeWasteSensor):
     """Sensor showing days until next collection."""
 
-    _attr_has_entity_name = True
     _attr_translation_key = "collection_countdown"
 
     def __init__(self, coordinator: SherbrookeWasteCoordinator, entry: ConfigEntry):
         """Initialize the sensor."""
-        super().__init__(coordinator)
-        self._entry = entry
+        super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}_countdown"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
@@ -169,36 +183,18 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
             model=f"Sector {entry.data[CONF_SECTOR]}",
         )
 
-    async def async_added_to_hass(self) -> None:
-        """When entity is added to hass."""
-        await super().async_added_to_hass()
-        # Update at midnight every day to recalculate days_until
-        self.async_on_remove(
-            async_track_time_change(
-                self.hass,
-                self._handle_midnight_update,
-                hour=0,
-                minute=0,
-                second=0,
-            )
-        )
-
-    async def _handle_midnight_update(self, now: datetime) -> None:
-        """Handle the midnight update to refresh day count."""
-        self.async_write_ha_state()
-
     @property
     def native_value(self):
         """Return the state of the sensor."""
         if not self.coordinator.data:
             return None
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection:
             return None
 
         collection_date = next_collection["date"]
-        days_until = (collection_date - datetime.now().date()).days
+        days_until = (collection_date - dt_util.now().date()).days
 
         return days_until
 
@@ -208,7 +204,7 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
         if not self.coordinator.data:
             return {}
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection:
             return {}
 
@@ -230,11 +226,11 @@ class CollectionCountdownSensor(CoordinatorEntity, SensorEntity):
         if not self.coordinator.data:
             return "mdi:calendar-clock"
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection:
             return "mdi:calendar-clock"
 
-        days_until = (next_collection["date"] - datetime.now().date()).days
+        days_until = (next_collection["date"] - dt_util.now().date()).days
 
         if days_until == 0:
             return "mdi:calendar-alert"

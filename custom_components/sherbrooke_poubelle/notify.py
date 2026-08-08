@@ -87,7 +87,7 @@ class WasteCollectionNotifyEntity(NotifyEntity):
         if not self.coordinator.data:
             return
 
-        next_collection = self.coordinator.data.get("next_collection")
+        next_collection = self.coordinator.get_next_collection()
         if not next_collection:
             return
 

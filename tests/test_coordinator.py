@@ -302,6 +302,62 @@ END:VCALENDAR"""
         assert data["next_collection"] is None
 
 
+class TestGetNextCollection:
+    """Test that the countdown never goes negative on stale cached data."""
+
+    @pytest.fixture
+    def mock_coordinator(self, mock_hass):
+        """Create a coordinator holding a day's worth of cached collections."""
+        from custom_components.sherbrooke_poubelle.coordinator import (
+            SherbrookeWasteCoordinator,
+        )
+
+        with patch.object(SherbrookeWasteCoordinator, "__init__", lambda s, h, u: None):
+            coordinator = SherbrookeWasteCoordinator(mock_hass, "http://test.url/ics")
+
+        coordinator.data = {
+            "collections": [
+                {"date": date(2026, 4, 13), "waste_type": [WASTE_TYPE_RECYCLING]},
+                {"date": date(2026, 4, 20), "waste_type": [WASTE_TYPE_COMPOST]},
+            ],
+            # Stale: still points at the 13th even after it has passed.
+            "next_collection": {
+                "date": date(2026, 4, 13),
+                "waste_type": [WASTE_TYPE_RECYCLING],
+            },
+        }
+        return coordinator
+
+    def _next_on(self, coordinator, today):
+        with patch("homeassistant.util.dt.now") as mock_now:
+            mock_now.return_value = datetime(today.year, today.month, today.day, 12, 0)
+            return coordinator.get_next_collection()
+
+    def test_returns_upcoming_collection(self, mock_coordinator):
+        """Before the collection, the nearest future date is returned."""
+        assert self._next_on(mock_coordinator, date(2026, 4, 11))["date"] == date(2026, 4, 13)
+
+    def test_collection_day_itself_still_counts(self, mock_coordinator):
+        """On collection day the count is 0, not the following collection."""
+        assert self._next_on(mock_coordinator, date(2026, 4, 13))["date"] == date(2026, 4, 13)
+
+    def test_rolls_over_the_day_after_collection(self, mock_coordinator):
+        """The day after, it advances instead of counting -1."""
+        for day, expected in ((14, date(2026, 4, 20)), (15, date(2026, 4, 20))):
+            collection = self._next_on(mock_coordinator, date(2026, 4, day))
+            assert collection["date"] == expected
+            assert (collection["date"] - date(2026, 4, day)).days >= 0
+
+    def test_all_collections_passed_returns_none(self, mock_coordinator):
+        """Very stale data yields None rather than a negative countdown."""
+        assert self._next_on(mock_coordinator, date(2026, 4, 21)) is None
+
+    def test_no_data_returns_none(self, mock_coordinator):
+        """No fetch has succeeded yet."""
+        mock_coordinator.data = None
+        assert self._next_on(mock_coordinator, date(2026, 4, 11)) is None
+
+
 class TestConstants:
     """Test that constants are properly defined."""
 
