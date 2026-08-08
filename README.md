@@ -128,7 +128,7 @@ tests/                        # Test suite
 
 dashboard-examples.md         # Dashboard card examples
 hacs.json                     # HACS metadata
-LICENSE                       # Personal Use License
+LICENSE                       # GNU GPL v3.0
 ```
 
 ## Data Source
@@ -142,8 +142,14 @@ This integration uses the official waste collection data from the [City of Sherb
 
 ## License
 
-This project is licensed under a **Personal Use License**. See [LICENSE](./LICENSE) for details.
+Copyright (C) 2024 Tom Gaillard ([@GaillardTom](https://github.com/GaillardTom))
+
+This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](./LICENSE) for the full text.
+
+You are free to use, modify and redistribute this integration. If you distribute a modified version, it must be released under these same terms, with the original copyright notice preserved.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 ## Disclaimer
 
-This is an unofficial integration and is not affiliated with the City of Sherbrooke.
+This is an unofficial integration and is not affiliated with, endorsed by, or supported by the City of Sherbrooke.
